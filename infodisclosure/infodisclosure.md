@@ -6,23 +6,23 @@ This example demonstrates information disclosure by injecting malicious query ob
 
 1. Install all dependencies
 
-    `$ npm install`
+   `$ npm install`
 
 2. Insert test data in the MongoDB database. Make sure the mongod is up and running by typing the `mongosh` command in the termainal. If mongod process is up then you will see that the connection was successful. Command to insert test data:
 
-    `$ npx ts-node insert-test-users.ts`
+   `$ npx ts-node insert-test-users.ts`
 
-This will create a database in MongoDB called __infodisclosure__. Verify its presence by connecting with mongosh and running the command `show dbs;`.
+This will create a database in MongoDB called **infodisclosure**. Verify its presence by connecting with mongosh and running the command `show dbs;`.
 
 2. Start the **insecure.ts** server
 
-    `$ npx ts-node insecure.ts`
+   `$ npx ts-node insecure.ts`
 
 3. In the browser, pretend to be a hacker and type a malicious request
 
-    ```
-        http://localhost:3000/userinfo?username[$ne]=
-    ```
+   ```
+       http://localhost:3000/userinfo?username[$ne]=
+   ```
 
 4. Do you see user information being displayed despite the malicious request not having a valid username in the request?
 
@@ -31,5 +31,11 @@ This will create a database in MongoDB called __infodisclosure__. Verify its pre
 Answer the following:
 
 1. Briefly explain the potential vulnerabilities in **insecure.ts**
+   ANSWER -
+   The vulnerability arises from not properly sanitizing the username input before using it in a database query. This oversight allows attackers to manipulate the query by injecting special characters or operators, potentially exposing sensitive information like user passwords
 2. Briefly explain how a malicious attacker can exploit them.
+   ANSWER -
+   An attacker could exploit this vulnerability by submitting specially crafted input that alters the database query, enabling them to retrieve data they shouldn't have access to, such as other users' information.
 3. Briefly explain the defensive techniques used in **secure.ts** to prevent the information disclosure vulnerability?
+   ANSWER -
+   The application addresses this issue by validating and sanitizing the username input. By removing non-alphanumeric characters and ensuring the input is in the expected format, it prevents unauthorized manipulation of the query and secures user data from disclosure.
